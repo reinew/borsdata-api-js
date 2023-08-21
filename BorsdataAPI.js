@@ -6,7 +6,6 @@
 // Please be advised that functions for global instruments require a pro+ subscription.
 
 // Import the required modules.
-import fetch from "node-fetch"
 import dotenv from "dotenv"
 
 // Create a class for the Borsdata API.
