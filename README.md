@@ -2,23 +2,35 @@
 
 I made this javascript class for a quick and easy use of Borsdata API.
 
-#### Setup:
-Create a .env file in the same folder as the class file, and add your API key on a single line.
-> API_KEY="\<your api key goes here\>"
+#### Features:
+- Easy to use
+- All calls are made with a single function
+- All functions are documented in the class file
+- All calls and responses are asynchronous
+- The class returns a promise
+- All data is returned as JSON
 
-Then, install the dependencies by running:
+#### Requirements:
+- API key from borsdata.se
+- A javascript runtime environment (node.js)
+- npm (node package manager)
+
+#### Setup:
+Install the dotenv dependency by running:
 > npm install
 
-#### Usage:
-Now, with just three lines of code, you can get the data you want.
+Create .env file in the same folder as the class file, add your API key on a single line.
+> API_KEY="\<your api key goes here\>"
 
+#### Usage:
+With just three lines of code, you can get the data you want. \
 This example code gets all the instruments.
 > import BorsdataAPI from "./BorsdataAPI.js" \
 > const borsdata = new BorsdataAPI() \
 > borsdata.getAllInstruments("instruments").then((data) => { console.log(data) })
 
-See <example.js> for more info about the code above, \
-and take a look in <test.js> for all possible calls more in depth. \
+See <example.js> for example of an async/await function. \
+Take a look in <test.js> for examples of all possible calls.
 
 ---
 
