@@ -105,7 +105,7 @@ class BorsdataAPI {
 		}
 	}
 
-	/** This method gets all nordic instruments or metadata. \
+	/** This method returns all nordic instruments or metadata. \
 	 * \
 	 * Choose one of the following API options: \
 	 * 'instruments' - Returns all instruments. \
@@ -123,7 +123,7 @@ class BorsdataAPI {
 		return await this.call(option)
 	}
 
-	/** This method gets all global instruments. (Require Pro+)
+	/** This method returns all global instruments. (Require Pro+)
 	 * @returns {object} a promise that resolves to the parsed JSON data.
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/Instruments
 	 */
@@ -131,7 +131,7 @@ class BorsdataAPI {
 		return await this.call("instruments/global")
 	}
 
-	/** This method gets all updated nordic instruments.
+	/** This method returns all updated nordic instruments.
 	 * @returns {object} a promise that resolves to the parsed JSON data.
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/Instruments
 	 */
@@ -140,8 +140,8 @@ class BorsdataAPI {
 	}
 
 	/** This method returns kpi history for the nordic market.
-	 * @param {int} insId Instrument id. (Get all different id's with the getAllInstruments('instruments') method.)
-	 * @param {int} kpiId Kpi id. (Get all different id's with the getKpiMetadata() method.)
+	 * @param {int} insId Instrument id. (Get all different id's with the "getAllInstruments('instruments')" method.)
+	 * @param {int} kpiId Kpi id. (Get all different id's with the "getKpiMetadata()" method.)
 	 * @param {string} reportType Report type. (year, r12, quarter)
 	 * @param {string} priceType Price type. (low, mean or high)
 	 * @param {int} maxCount Max number of results returned. (Max Year=20, R12&Quarter=40) (optional, can be empty)
@@ -157,13 +157,13 @@ class BorsdataAPI {
 	}
 
 	/** This method returns a kpi summary list for one instrument in the nordic market.
-	 * @param {int} insId Instrument id. (Get all different id's with the getAllInstruments('instruments') method.)
+	 * @param {int} insId Instrument id. (Get all different id's with the "getAllInstruments('instruments')" method.)
 	 * @param {string} reportType Report type. (year, r12, quarter)
 	 * @param {int} maxCount Max number of results returned. (optional, can be empty)
 	 * @returns {object} a promise that resolves to the parsed JSON data.
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/KPI-History
 	 */
-	async getKpisSummary(insId, reportType, maxCount) {
+	async getKpiSummary(insId, reportType, maxCount) {
 		const requestUrl = `instruments/${insId}/kpis/${reportType}/summary`
 		const params = {
 			maxCount: maxCount,
@@ -172,7 +172,7 @@ class BorsdataAPI {
 	}
 
 	/** This method returns kpi history for a list of instruments in the nordic market.
-	 * @param {int} kpiId Kpi id. (Get all different id's with the getKpiMetadata() method.)
+	 * @param {int} kpiId Kpi id. (Get all different id's with the "getKpiMetadata()" method.)
 	 * @param {string} reportType Report type. (year, r12, quarter)
 	 * @param {string} priceType Price type. (low, mean or high)
 	 * @param {string} instList Comma separated list of instrument id's. (Max 50)  (Get all different id's with the getAllInstruments('instruments') method.)
@@ -191,7 +191,7 @@ class BorsdataAPI {
 
 	/** This method returns kpi data for one instrument in the nordic market.
 	 * @param {int} insId Instrument id. (Get all different id's with the getAllInstruments('instruments') method.)
-	 * @param {int} kpiId Kpi id. (Get all different id's with the getKpiMetadata() method.)
+	 * @param {int} kpiId Kpi id. (Get all different id's with the "getKpiMetadata()" method.)
 	 * @param {string} calcGroup Kpi calculation group. Mainly based on time.
 	 * @param {string} calc Kpi calculation.
 	 * @returns {object} a promise that resolves to the parsed JSON data.
@@ -203,7 +203,7 @@ class BorsdataAPI {
 	}
 
 	/** This method returns kpi data for all instruments in the nordic market.
-	 * @param {int} kpiId Kpi id. (Get all different id's with the getKpiMetadata() method.)
+	 * @param {int} kpiId Kpi id. (Get all different id's with the "getKpiMetadata()" method.)
 	 * @param {string} calcGroup Kpi calculation group. Mainly based on time.
 	 * @param {string} calc Kpi calculation.
 	 * @returns {object} a promise that resolves to the parsed JSON data.
@@ -215,7 +215,7 @@ class BorsdataAPI {
 	}
 
 	/** This method returns kpi data for all global instruments. (Require Pro+)
-	 * @param {int} kpiId Kpi id. (Get all different id's with the getKpiMetadata() method.)
+	 * @param {int} kpiId Kpi id. (Get all different id's with the "getKpiMetadata()" method.)
 	 * @param {string} calcGroup Kpi calculation group. Mainly based on time.
 	 * @param {string} calc Kpi calculation.
 	 * @returns {object} a promise that resolves to the parsed JSON data.
@@ -227,7 +227,7 @@ class BorsdataAPI {
 	}
 
 	/** This method returns nordic kpi last updated calculation dateTime.
-	 * @returns {object} Returns nordic kpi last updated calculation dateTime as JSON.
+	 * @returns {object} a promise that resolves to the parsed JSON data.
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/KPI-Screener
 	 */
 	async getKpisUpdated() {
@@ -243,7 +243,7 @@ class BorsdataAPI {
 	}
 
 	/** This method returns reports for one instrument with one report type for the nordic market.
-	 * @param {int} insId Instrument id. (Get all different id's with the getAllInstruments('instruments') method.)
+	 * @param {int} insId Instrument id. (Get all different id's with the "getAllInstruments('instruments')" method.)
 	 * @param {string} reportType Report type. (year, r12, quarter)
 	 * @param {int} maxCount Max number of results returned. (Max Year=20, R12&Quarter=40) (optional, can be empty)
 	 * @returns {object} a promise that resolves to the parsed JSON data.
@@ -258,7 +258,7 @@ class BorsdataAPI {
 	}
 
 	/** This method returns reports for one instrument with all report types included. (year, r12, quarter)
-	 * @param {int} insId Instrument id. (Get all different id's with the getAllInstruments('instruments') method.)
+	 * @param {int} insId Instrument id. (Get all different id's with the "getAllInstruments('instruments')" method.)
 	 * @param {int} maxYearCount Max number of year reports returned. (10 year default, max 20)
 	 * @param {int} maxR12QCount Max number of r12 and quarter reports returned. (10 default, max 40)
 	 * @returns {object} a promise that resolves to the parsed JSON data.
@@ -282,7 +282,7 @@ class BorsdataAPI {
 	}
 
 	/** This method returns reports for list of instruments with all report types included. (year, r12, quarter)
-	 * @param {string} instList Comma separated list of instrument id's. (Max 50) (Get all different id's with the getAllInstruments('instruments') method.)
+	 * @param {string} instList Comma separated list of instrument id's. (Max 50) (Get all different id's with the "getAllInstruments('instruments')" method.)
 	 * @param {int} maxYearCount Max number of year reports returned. (10 year default, max 20)
 	 * @param {int} maxR12QCount Max number of r12 and quarter reports returned. (10 default, max 40)
 	 * @returns {object} a promise that resolves to the parsed JSON data.
@@ -298,7 +298,7 @@ class BorsdataAPI {
 	}
 
 	/** This method returns stockprices for one instrument between two dates for the nordic market.
-	 * @param {int} insId Instrument id. (Get all different id's with the getAllInstruments('instruments') method.)
+	 * @param {int} insId Instrument id. (Get all different id's with the "getAllInstruments('instruments')" method.)
 	 * @param {string} from From date. (YYYY-MM-DD) (optional, can be empty)
 	 * @param {string} to To date. (YYYY-MM-DD) (optional, can be empty)
 	 * @param {int} maxCount Max number of results returned. (Max 20) (optional, can be empty)
@@ -316,7 +316,7 @@ class BorsdataAPI {
 	}
 
 	/** This method returns stockprices for a list of instruments between two dates for the nordic market.
-	 * @param {string} instList Comma separated list of instrument id's. (Max 50) (Get all different id's with the getAllInstruments('instruments') method.)
+	 * @param {string} instList Comma separated list of instrument id's. (Max 50) (Get all different id's with the "getAllInstruments('instruments')" method.)
 	 * @param {string} from From date. (YYYY-MM-DD) (optional, can be empty)
 	 * @param {string} to To date. (YYYY-MM-DD) (optional, can be empty)
 	 * @returns {object} a promise that resolves to the parsed JSON data.
@@ -347,7 +347,7 @@ class BorsdataAPI {
 		return await this.call("instruments/stockprices/global/last")
 	}
 
-	/** This method returns one stockprice for each nordic instrument on a specific date.
+	/** This method returns one stock price for each nordic instrument on a specific date.
 	 * @param {string} date Date. (YYYY-MM-DD)
 	 * @returns {object} a promise that resolves to the parsed JSON data.
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/Stockprice
@@ -359,7 +359,7 @@ class BorsdataAPI {
 		return await this.call("instruments/stockprices/date", params)
 	}
 
-	/** This method returns one stockprice for each global instrument on a specific date. Only Global(Pro+)
+	/** This method returns one stock price for each global instrument on a specific date. Only Global(Pro+)
 	 * @param {string} date Date. (YYYY-MM-DD)
 	 * @returns {object} a promise that resolves to the parsed JSON data.
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/Stockprice

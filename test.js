@@ -50,7 +50,7 @@ switch (process.argv[2]) {
 		borsdata.getKpisHistory(insId, kpiId, reportType, priceType, maxCount).then((data) => console.log(data))
 		break
 	case "5": // Returns Kpis summary list
-		borsdata.getKpisSummary(insId, reportType, maxCount).then((data) => console.log(JSON.stringify(data, null, 2)))
+		borsdata.getKpiSummary(insId, reportType, maxCount).then((data) => console.log(JSON.stringify(data, null, 2)))
 		break
 	case "6": // Returns Kpis History for list of instruments. (Instrument Array)
 		borsdata
