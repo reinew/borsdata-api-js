@@ -5,6 +5,8 @@
  * @license MIT
  * @link https://github.com/reinew/borsdata-api-js
  *
+ * This class is a wrapper for easily interacting with Borsdata API.
+ *
  * This class have not been thoroughly tested under all conditions.
  * The creator cannot guarantee or imply reliability, serviceability, or function of this class.
  * All code contained herein are provided to you “AS IS” without any warranties of any kind.
@@ -144,30 +146,38 @@ class BorsdataAPI {
 	 * @param {int} kpiId Kpi id. (Get all different id's with the "getKpiMetadata()" method.)
 	 * @param {string} reportType Report type. (year, r12, quarter)
 	 * @param {string} priceType Price type. (low, mean or high)
-	 * @param {int} maxCount Max number of results returned. (Max Year=20, R12&Quarter=40) (optional, can be empty)
+	 * @param {int} maxCount Max number of results returned. (Max Year=20, R12&Quarter=40) (optional)
 	 * @returns {object} a promise that resolves to the parsed JSON data.
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/KPI-History
 	 */
-	async getKpisHistory(insId, kpiId, reportType, priceType, maxCount) {
+	async getKpisHistory(insId, kpiId, reportType, priceType, maxCount = null) {
 		const requestUrl = `instruments/${insId}/kpis/${kpiId}/${reportType}/${priceType}/history`
-		const params = {
-			maxCount: maxCount,
+
+		const params = {}
+
+		if (maxCount !== null) {
+			params.maxCount = maxCount
 		}
+
 		return await this.call(requestUrl, params)
 	}
 
 	/** This method returns a kpi summary list for one instrument in the nordic market.
 	 * @param {int} insId Instrument id. (Get all different id's with the "getAllInstruments('instruments')" method.)
 	 * @param {string} reportType Report type. (year, r12, quarter)
-	 * @param {int} maxCount Max number of results returned. (optional, can be empty)
+	 * @param {int} maxCount Max number of results returned. (optional)
 	 * @returns {object} a promise that resolves to the parsed JSON data.
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/KPI-History
 	 */
-	async getKpiSummary(insId, reportType, maxCount) {
+	async getKpiSummary(insId, reportType, maxCount = null) {
 		const requestUrl = `instruments/${insId}/kpis/${reportType}/summary`
-		const params = {
-			maxCount: maxCount,
+
+		const params = {}
+
+		if (maxCount !== null) {
+			params.maxCount = maxCount
 		}
+
 		return await this.call(requestUrl, params)
 	}
 
@@ -176,16 +186,21 @@ class BorsdataAPI {
 	 * @param {string} reportType Report type. (year, r12, quarter)
 	 * @param {string} priceType Price type. (low, mean or high)
 	 * @param {string} instList Comma separated list of instrument id's. (Max 50)  (Get all different id's with the getAllInstruments('instruments') method.)
-	 * @param {int} maxCount Max number of results returned. (Max Year=20, R12&Quarter=40) (optional, can be empty)
+	 * @param {int} maxCount Max number of results returned. (Max Year=20, R12&Quarter=40) (optional)
 	 * @returns {object} a promise that resolves to the parsed JSON data.
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/KPI-History
 	 */
-	async getHistoricalKpis(kpiId, reportType, priceType, instList, maxCount) {
+	async getHistoricalKpis(kpiId, reportType, priceType, instList, maxCount = null) {
 		const requestUrl = `instruments/kpis/${kpiId}/${reportType}/${priceType}/history`
+
 		const params = {
 			instList: instList,
-			maxCount: maxCount,
 		}
+
+		if (maxCount !== null) {
+			params.maxCount = maxCount
+		}
+
 		return await this.call(requestUrl, params)
 	}
 
@@ -245,31 +260,42 @@ class BorsdataAPI {
 	/** This method returns reports for one instrument with one report type for the nordic market.
 	 * @param {int} insId Instrument id. (Get all different id's with the "getAllInstruments('instruments')" method.)
 	 * @param {string} reportType Report type. (year, r12, quarter)
-	 * @param {int} maxCount Max number of results returned. (Max Year=20, R12&Quarter=40) (optional, can be empty)
+	 * @param {int} maxCount Max number of results returned. (Max Year=20, R12&Quarter=40) (optional)
 	 * @returns {object} a promise that resolves to the parsed JSON data.
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/Reports
 	 */
-	async getReportsByType(insId, reportType, maxCount) {
+	async getReportsByType(insId, reportType, maxCount = null) {
 		const requestUrl = `instruments/${insId}/reports/${reportType}`
-		const params = {
-			maxCount: maxCount,
+
+		const params = {}
+
+		if (maxCount !== null) {
+			params.maxCount = maxCount
 		}
+
 		return await this.call(requestUrl, params)
 	}
 
 	/** This method returns reports for one instrument with all report types included. (year, r12, quarter)
 	 * @param {int} insId Instrument id. (Get all different id's with the "getAllInstruments('instruments')" method.)
-	 * @param {int} maxYearCount Max number of year reports returned. (10 year default, max 20)
-	 * @param {int} maxR12QCount Max number of r12 and quarter reports returned. (10 default, max 40)
+	 * @param {int} maxYearCount Max number of year reports returned. (10 year default, max 20) (optional)
+	 * @param {int} maxR12QCount Max number of r12 and quarter reports returned. (10 default, max 40) (optional)
 	 * @returns {object} a promise that resolves to the parsed JSON data.
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/Reports
 	 */
-	async getReportsForAllTypes(insId, maxYearCount, maxR12QCount) {
+	async getReportsForAllTypes(insId, maxYearCount = null, maxR12QCount = null) {
 		const requestUrl = `instruments/${insId}/reports`
-		const params = {
-			maxYearCount: maxYearCount,
-			maxR12QCount: maxR12QCount,
+
+		const params = {}
+
+		if (maxYearCount !== null) {
+			params.maxYearCount = maxYearCount
 		}
+
+		if (maxR12QCount !== null) {
+			params.maxR12QCount = maxR12QCount
+		}
+
 		return await this.call(requestUrl, params)
 	}
 
@@ -283,51 +309,75 @@ class BorsdataAPI {
 
 	/** This method returns reports for list of instruments with all report types included. (year, r12, quarter)
 	 * @param {string} instList Comma separated list of instrument id's. (Max 50) (Get all different id's with the "getAllInstruments('instruments')" method.)
-	 * @param {int} maxYearCount Max number of year reports returned. (10 year default, max 20)
-	 * @param {int} maxR12QCount Max number of r12 and quarter reports returned. (10 default, max 40)
+	 * @param {int} maxYearCount Max number of year reports returned. (10 year default, max 20) (optional)
+	 * @param {int} maxR12QCount Max number of r12 and quarter reports returned. (10 default, max 40) (optional)
 	 * @returns {object} a promise that resolves to the parsed JSON data.
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/Reports
 	 */
-	async getAllReports(instList, maxYearCount, maxR12QCount) {
+	async getAllReports(instList, maxYearCount = null, maxR12QCount = null) {
 		const params = {
 			instList: instList,
-			maxYearCount: maxYearCount,
-			maxR12QCount: maxR12QCount,
 		}
+
+		if (maxYearCount !== null) {
+			params.maxYearCount = maxYearCount
+		}
+
+		if (maxR12QCount !== null) {
+			params.maxR12QCount = maxR12QCount
+		}
+
 		return await this.call("instruments/reports", params)
 	}
 
 	/** This method returns stockprices for one instrument between two dates for the nordic market.
 	 * @param {int} insId Instrument id. (Get all different id's with the "getAllInstruments('instruments')" method.)
-	 * @param {string} from From date. (YYYY-MM-DD) (optional, can be empty)
-	 * @param {string} to To date. (YYYY-MM-DD) (optional, can be empty)
-	 * @param {int} maxCount Max number of results returned. (Max 20) (optional, can be empty)
+	 * @param {string} from From date. (YYYY-MM-DD) (optional)
+	 * @param {string} to To date. (YYYY-MM-DD) (optional)
+	 * @param {int} maxCount Max number of results returned. (Max 20) (optional)
 	 * @returns {object} a promise that resolves to the parsed JSON data.
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/Stockprice
 	 */
-	async getStockPricesForInstrument(insId, from, to, maxCount) {
+	async getStockPricesForInstrument(insId, from = null, to = null, maxCount = null) {
 		const requestUrl = `instruments/${insId}/stockprices`
-		const params = {
-			from: from,
-			to: to,
-			maxCount: maxCount,
+
+		const params = {}
+
+		if (from !== null) {
+			params.from = from
 		}
+
+		if (to !== null) {
+			params.to = to
+		}
+
+		if (maxCount !== null) {
+			params.maxCount = maxCount
+		}
+
 		return await this.call(requestUrl, params)
 	}
 
 	/** This method returns stockprices for a list of instruments between two dates for the nordic market.
 	 * @param {string} instList Comma separated list of instrument id's. (Max 50) (Get all different id's with the "getAllInstruments('instruments')" method.)
-	 * @param {string} from From date. (YYYY-MM-DD) (optional, can be empty)
-	 * @param {string} to To date. (YYYY-MM-DD) (optional, can be empty)
+	 * @param {string} from From date. (YYYY-MM-DD) (optional)
+	 * @param {string} to To date. (YYYY-MM-DD) (optional)
 	 * @returns {object} a promise that resolves to the parsed JSON data.
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/Stockprice
 	 */
-	async getStockPricesForListOfInstruments(instList, from, to) {
+	async getStockPricesForListOfInstruments(instList, from = null, to = null) {
 		const params = {
 			instList: instList,
-			from: from,
-			to: to,
 		}
+
+		if (from !== null) {
+			params.from = from
+		}
+
+		if (to !== null) {
+			params.to = to
+		}
+
 		return await this.call("instruments/stockprices", params)
 	}
 
