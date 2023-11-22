@@ -62,7 +62,7 @@ class BorsdataAPI {
 	 * @returns {object} a promise that resolves to the parsed JSON data.
 	 * @throws {error} API error.
 	 */
-	async call(requestUrl, params = {}, authKey = this.key) {
+	async getDataFromApi(requestUrl, params = {}, authKey = this.key) {
 		// Building requestUrl with params, if any.
 		if (Object.keys(params).length > 0) {
 			const paramString = Object.entries(params)
@@ -91,7 +91,7 @@ class BorsdataAPI {
 				const retryAfter = response.headers.get("Retry-After")
 				console.warn(`Rate limited! Retrying after ${retryAfter} seconds...`)
 				await new Promise((resolve) => setTimeout(resolve, retryAfter * 1000))
-				return await this.call(requestUrl, params, authKey)
+				return await this.getDataFromApi(requestUrl, params, authKey)
 			} else if (!response.ok) {
 				let error = "HTTP error! status: " + response.status + " - " + response.statusText
 				if (response.status === 418) {
@@ -122,7 +122,27 @@ class BorsdataAPI {
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/Instruments
 	 */
 	async getAllInstruments(option) {
-		return await this.call(option)
+		return await this.getDataFromApi(option)
+	}
+
+	/** This method returns Holdings data in the nordic for a list of instruments. (Require Pro+)
+	 * \
+	 * Choose one of the following API options: \
+	 * 'insider' - Returns holdings insider. \
+	 * 'shorts' - Returns holdings short. \
+	 * 'buyback' - Returns holdings buyback.
+	 * \
+	 * @param {string} holdingsOption API option.
+	 * @param {string} instList Comma separated list of instrument id's. (Max 50) (Get all different id's with the "getAllInstruments('instruments')" method.)
+	 * @returns {object} a promise that resolves to the parsed JSON data.
+	 * @link https://github.com/Borsdata-Sweden/API/wiki/Holdings
+	 */
+	async getHoldings(holdingsOption, instList) {
+		const params = {
+			instList: instList,
+		}
+		const requestUrl = `holdings/${holdingsOption}`
+		return await this.getDataFromApi(requestUrl, params)
 	}
 
 	/** This method returns all global instruments. (Require Pro+)
@@ -130,7 +150,7 @@ class BorsdataAPI {
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/Instruments
 	 */
 	async getAllGlobalInstruments() {
-		return await this.call("instruments/global")
+		return await this.getDataFromApi("instruments/global")
 	}
 
 	/** This method returns all updated nordic instruments.
@@ -138,7 +158,33 @@ class BorsdataAPI {
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/Instruments
 	 */
 	async getAllUpdatedInstruments() {
-		return await this.call("instruments/updated")
+		return await this.getDataFromApi("instruments/updated")
+	}
+
+	/** This method returns descriptions for a list of instruments.
+	 * @param {string} instList Comma separated list of instrument id's. (Max 50) (Get all different id's with the "getAllInstruments('instruments')" method.)
+	 * @returns {object} a promise that resolves to the parsed JSON data.
+	 * @link https://github.com/Borsdata-Sweden/API/wiki/Instruments
+	 */
+	async getInstrumentDescriptions($instList) {
+		const params = {
+			instList: $instList,
+		}
+		return await this.getDataFromApi("instruments/description", params)
+	}
+
+	/** This method returns calendar data for the nordic market.
+	 * @param {string} calendarOption API option. (report, dividend)
+	 * @param {string} instList Comma separated list of instrument id's. (Max 50) (Get all different id's with the "getAllInstruments('instruments')" method.)
+	 * @returns {object} a promise that resolves to the parsed JSON data.
+	 * @link https://github.com/Borsdata-Sweden/API/wiki/Calendar
+	 */
+	async getCalendar(calendarOption, instList) {
+		const params = {
+			instList: instList,
+		}
+		const requestUrl = `instruments/${calendarOption}/calendar`
+		return await this.getDataFromApi(requestUrl, params)
 	}
 
 	/** This method returns kpi history for the nordic market.
@@ -159,7 +205,7 @@ class BorsdataAPI {
 			params.maxCount = maxCount
 		}
 
-		return await this.call(requestUrl, params)
+		return await this.getDataFromApi(requestUrl, params)
 	}
 
 	/** This method returns a kpi summary list for one instrument in the nordic market.
@@ -178,7 +224,7 @@ class BorsdataAPI {
 			params.maxCount = maxCount
 		}
 
-		return await this.call(requestUrl, params)
+		return await this.getDataFromApi(requestUrl, params)
 	}
 
 	/** This method returns kpi history for a list of instruments in the nordic market.
@@ -201,7 +247,7 @@ class BorsdataAPI {
 			params.maxCount = maxCount
 		}
 
-		return await this.call(requestUrl, params)
+		return await this.getDataFromApi(requestUrl, params)
 	}
 
 	/** This method returns kpi data for one instrument in the nordic market.
@@ -214,7 +260,7 @@ class BorsdataAPI {
 	 */
 	async getKpisForOneInstrument(insId, kpiId, calcGroup, calc) {
 		const requestUrl = `instruments/${insId}/kpis/${kpiId}/${calcGroup}/${calc}`
-		return await this.call(requestUrl)
+		return await this.getDataFromApi(requestUrl)
 	}
 
 	/** This method returns kpi data for all instruments in the nordic market.
@@ -226,7 +272,7 @@ class BorsdataAPI {
 	 */
 	async getKpisForAllInstruments(kpiId, calcGroup, calc) {
 		const requestUrl = `instruments/kpis/${kpiId}/${calcGroup}/${calc}`
-		return await this.call(requestUrl)
+		return await this.getDataFromApi(requestUrl)
 	}
 
 	/** This method returns kpi data for all global instruments. (Require Pro+)
@@ -238,7 +284,7 @@ class BorsdataAPI {
 	 */
 	async getKpisForAllGlobalInstruments(kpiId, calcGroup, calc) {
 		const requestUrl = `instruments/global/kpis/${kpiId}/${calcGroup}/${calc}`
-		return await this.call(requestUrl)
+		return await this.getDataFromApi(requestUrl)
 	}
 
 	/** This method returns nordic kpi last updated calculation dateTime.
@@ -246,7 +292,7 @@ class BorsdataAPI {
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/KPI-Screener
 	 */
 	async getKpisUpdated() {
-		return await this.call("instruments/kpis/updated")
+		return await this.getDataFromApi("instruments/kpis/updated")
 	}
 
 	/** This method returns kpi metadata.
@@ -254,7 +300,7 @@ class BorsdataAPI {
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/KPI-Screener
 	 */
 	async getKpisMetadata() {
-		return await this.call("instruments/kpis/metadata")
+		return await this.getDataFromApi("instruments/kpis/metadata")
 	}
 
 	/** This method returns reports for one instrument with one report type for the nordic market.
@@ -273,7 +319,7 @@ class BorsdataAPI {
 			params.maxCount = maxCount
 		}
 
-		return await this.call(requestUrl, params)
+		return await this.getDataFromApi(requestUrl, params)
 	}
 
 	/** This method returns reports for one instrument with all report types included. (year, r12, quarter)
@@ -296,7 +342,7 @@ class BorsdataAPI {
 			params.maxR12QCount = maxR12QCount
 		}
 
-		return await this.call(requestUrl, params)
+		return await this.getDataFromApi(requestUrl, params)
 	}
 
 	/** This method returns report metadata for the nordic market.
@@ -304,7 +350,7 @@ class BorsdataAPI {
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/Reports
 	 */
 	async getReportsMetadata() {
-		return await this.call("instruments/reports/metadata")
+		return await this.getDataFromApi("instruments/reports/metadata")
 	}
 
 	/** This method returns reports for list of instruments with all report types included. (year, r12, quarter)
@@ -327,7 +373,7 @@ class BorsdataAPI {
 			params.maxR12QCount = maxR12QCount
 		}
 
-		return await this.call("instruments/reports", params)
+		return await this.getDataFromApi("instruments/reports", params)
 	}
 
 	/** This method returns stockprices for one instrument between two dates for the nordic market.
@@ -355,7 +401,7 @@ class BorsdataAPI {
 			params.maxCount = maxCount
 		}
 
-		return await this.call(requestUrl, params)
+		return await this.getDataFromApi(requestUrl, params)
 	}
 
 	/** This method returns stockprices for a list of instruments between two dates for the nordic market.
@@ -378,7 +424,7 @@ class BorsdataAPI {
 			params.to = to
 		}
 
-		return await this.call("instruments/stockprices", params)
+		return await this.getDataFromApi("instruments/stockprices", params)
 	}
 
 	/** This method returns last stockprices for all nordic instruments.
@@ -386,7 +432,7 @@ class BorsdataAPI {
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/Stockprice
 	 */
 	async getLastStockPrices() {
-		return await this.call("instruments/stockprices/last")
+		return await this.getDataFromApi("instruments/stockprices/last")
 	}
 
 	/** This method returns last/latest stockprices for all global instruments. Only Global(Pro+)
@@ -394,7 +440,7 @@ class BorsdataAPI {
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/Stockprice
 	 */
 	async getLastGlobalStockPrices() {
-		return await this.call("instruments/stockprices/global/last")
+		return await this.getDataFromApi("instruments/stockprices/global/last")
 	}
 
 	/** This method returns one stock price for each nordic instrument on a specific date.
@@ -406,7 +452,7 @@ class BorsdataAPI {
 		const params = {
 			date: date,
 		}
-		return await this.call("instruments/stockprices/date", params)
+		return await this.getDataFromApi("instruments/stockprices/date", params)
 	}
 
 	/** This method returns one stock price for each global instrument on a specific date. Only Global(Pro+)
@@ -418,14 +464,14 @@ class BorsdataAPI {
 		const params = {
 			date: date,
 		}
-		return await this.call("instruments/stockprices/global/date", params)
+		return await this.getDataFromApi("instruments/stockprices/global/date", params)
 	}
 
 	/** This method returns stock splits for all nordic instruments. Max 1 year history.
 	 * @returns {object} a promise that resolves to the parsed JSON data.
 	 */
 	async getStockSplits() {
-		return await this.call("instruments/stockSplits")
+		return await this.getDataFromApi("instruments/stockSplits")
 	}
 }
 
