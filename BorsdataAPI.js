@@ -467,11 +467,18 @@ class BorsdataAPI {
 		return await this.getDataFromApi("instruments/stockprices/global/date", params)
 	}
 
-	/** This method returns stock splits for all nordic instruments. Max 1 year history.
+	/** This method returns stock splits for all nordic instruments.
+   * @param {string} from From date. (YYYY-MM-DD) (optional)
 	 * @returns {object} a promise that resolves to the parsed JSON data.
 	 */
-	async getStockSplits() {
-		return await this.getDataFromApi("instruments/stockSplits")
+  async getStockSplits(from = null) {
+    const params = {}
+
+    if (from !== null) {
+      params.from = from
+    }
+
+    return await this.getDataFromApi("instruments/stockSplits", params)
 	}
 }
 

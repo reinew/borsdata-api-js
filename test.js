@@ -10,7 +10,7 @@
  * The creator cannot guarantee or imply reliability, serviceability, or function of this class.
  * All code contained herein are provided to you “AS IS” without any warranties of any kind.
  *
- * Run this script with the following command: node test.js <method number> (1-22)
+ * Run this script with the following command: node test.js <method number> (1-25)
  */
 
 // Import the API class file.
@@ -29,12 +29,12 @@ const reportType = "year" // Options: year, quarter, r12
 const priceType = "mean" // Options: low, mean, high
 const calcGroup = "last" // For KPI-Screener, for more info, see https://github.com/Borsdata-Sweden/API/wiki/KPI-Screener
 const calc = "latest" // For KPI-Screener, for more info, see https://github.com/Borsdata-Sweden/API/wiki/KPI-Screener
-const from = "2022-01-01" // For stock price history. (optional, can be empty)
-const to = "2022-12-31" // For stock price history. (optional, can be empty)
+const from = "2024-01-01" // For stock price history. (optional, can be empty)
+const to = "2024-10-25" // For stock price history. (optional, can be empty)
 const maxCount = "2" // 10 default. year=20 max, r12 & quarter=40 max. (optional, can be empty)
 const maxYearCount = "2" // 10 default, 20 max.
 const maxR12QCount = "2" // 10 default, 40 max.
-const date = "2023-11-21" // For stockprices date.
+const date = "2024-10-25" // For stockprices date.
 const instList = "2,3,6" // List of instrument id's.
 
 // all possible API calls as methods
@@ -118,7 +118,7 @@ switch (process.argv[2]) {
 		borsdata.getGlobalStockPricesForDate(date).then((data) => console.log(data))
 		break
 	case "25": // Returns Stock Splits for all Instruments
-		borsdata.getStockSplits().then((data) => console.log(data))
+		borsdata.getStockSplits(from).then((data) => console.log(data))
 		break
 
 	default:
