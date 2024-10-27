@@ -307,17 +307,22 @@ class BorsdataAPI {
 	 * @param {int} insId Instrument id. (Get all different id's with the "getAllInstruments('instruments')" method.)
 	 * @param {string} reportType Report type. (year, r12, quarter)
 	 * @param {int} maxCount Max number of results returned. (Max Year=20, R12&Quarter=40) (optional)
+   * @param {int} original Get original report data currency. (optional) {0, 1}
 	 * @returns {object} a promise that resolves to the parsed JSON data.
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/Reports
 	 */
-	async getReportsByType(insId, reportType, maxCount = null) {
+	async getReportsByType(insId, reportType, maxCount = null, original = null) {
 		const requestUrl = `instruments/${insId}/reports/${reportType}`
 
 		const params = {}
 
 		if (maxCount !== null) {
 			params.maxCount = maxCount
-		}
+    }
+
+    if (original !== null) {
+      params.original = original
+    }
 
 		return await this.getDataFromApi(requestUrl, params)
 	}
@@ -326,10 +331,11 @@ class BorsdataAPI {
 	 * @param {int} insId Instrument id. (Get all different id's with the "getAllInstruments('instruments')" method.)
 	 * @param {int} maxYearCount Max number of year reports returned. (10 year default, max 20) (optional)
 	 * @param {int} maxR12QCount Max number of r12 and quarter reports returned. (10 default, max 40) (optional)
+   * @param {int} original Get original report data currency. (optional) {0, 1}
 	 * @returns {object} a promise that resolves to the parsed JSON data.
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/Reports
 	 */
-	async getReportsForAllTypes(insId, maxYearCount = null, maxR12QCount = null) {
+	async getReportsForAllTypes(insId, maxYearCount = null, maxR12QCount = null, original = null) {
 		const requestUrl = `instruments/${insId}/reports`
 
 		const params = {}
@@ -340,7 +346,11 @@ class BorsdataAPI {
 
 		if (maxR12QCount !== null) {
 			params.maxR12QCount = maxR12QCount
-		}
+    }
+
+    if (original !== null) {
+      params.original = original
+    }
 
 		return await this.getDataFromApi(requestUrl, params)
 	}
@@ -357,10 +367,11 @@ class BorsdataAPI {
 	 * @param {string} instList Comma separated list of instrument id's. (Max 50) (Get all different id's with the "getAllInstruments('instruments')" method.)
 	 * @param {int} maxYearCount Max number of year reports returned. (10 year default, max 20) (optional)
 	 * @param {int} maxR12QCount Max number of r12 and quarter reports returned. (10 default, max 40) (optional)
+   * @param {int} original Get original report data currency. (optional) {0, 1}
 	 * @returns {object} a promise that resolves to the parsed JSON data.
 	 * @link https://github.com/Borsdata-Sweden/API/wiki/Reports
 	 */
-	async getAllReports(instList, maxYearCount = null, maxR12QCount = null) {
+	async getAllReports(instList, maxYearCount = null, maxR12QCount = null, original = null) {
 		const params = {
 			instList: instList,
 		}
@@ -371,7 +382,11 @@ class BorsdataAPI {
 
 		if (maxR12QCount !== null) {
 			params.maxR12QCount = maxR12QCount
-		}
+    }
+
+    if (original !== null) {
+      params.original = original
+    }
 
 		return await this.getDataFromApi("instruments/reports", params)
 	}

@@ -36,6 +36,7 @@ const maxYearCount = "2" // 10 default, 20 max.
 const maxR12QCount = "2" // 10 default, 40 max.
 const date = "2024-10-25" // For stockprices date.
 const instList = "2,3,6" // List of instrument id's.
+const original = "1" // get original report data currency. (optional) {0, 1}
 
 // all possible API calls as methods
 switch (process.argv[2]) {
@@ -84,17 +85,17 @@ switch (process.argv[2]) {
 		borsdata.getKpisMetadata().then((data) => console.log(data))
 		break
 	case "15": // Returns Reports for Instrument. Report Type (year, r12, quarter)
-		borsdata.getReportsByType(insId, reportType, maxCount).then((data) => console.log(data))
+		borsdata.getReportsByType(insId, reportType, maxCount, original).then((data) => console.log(data))
 		break
 	case "16": // Returns Reports for one Instrument, All Reports Type included. (year, r12, quarter)
-		borsdata.getReportsForAllTypes(insId, maxYearCount, maxR12QCount).then((data) => console.log(data))
+		borsdata.getReportsForAllTypes(insId, maxYearCount, maxR12QCount, original).then((data) => console.log(data))
 		break
 	case "17": // Returns Report metadata
 		borsdata.getReportsMetadata().then((data) => console.log(data))
 		break
 	case "18": // Returns Reports for list of instruments (Instrument Array)
 		borsdata
-			.getAllReports(instList, maxYearCount, maxR12QCount)
+			.getAllReports(instList, maxYearCount, maxR12QCount, original)
 			.then((data) => console.log(JSON.stringify(data, null, 2)))
 		break
 	case "19": // Returns StockPrices for Instrument
